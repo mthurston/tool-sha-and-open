@@ -12,12 +12,14 @@ namespace ShaOpen.Commands
     {
         private readonly IFileService _fileService;
         private readonly IShaCalculator _shaCalculator;
+        private readonly string _downloadsPath;
 
-        public ShaCommand(IFileService fileService, IShaCalculator shaCalculator)
+        public ShaCommand(IFileService fileService, IShaCalculator shaCalculator, string downloadsPath)
             : base("A tool to find and open files by their SHA")
         {
             _fileService = fileService;
             _shaCalculator = shaCalculator;
+            _downloadsPath = downloadsPath;
 
             var shaArgument = new Argument<string?>("sha", () => null, "The SHA of the file to open");
             Add(shaArgument);
@@ -46,7 +48,7 @@ namespace ShaOpen.Commands
             table.AddColumn("File");
             table.AddColumn("SHA");
 
-            var files = _fileService.GetFilesFromDownloads();
+            var files = _fileService.GetFilesFromDirectory(_downloadsPath);
             foreach (var file in files)
             {
                 var fileName = Path.GetFileName(file);
@@ -60,7 +62,7 @@ namespace ShaOpen.Commands
 
         private Task OpenFile(string sha)
         {
-            var files = _fileService.GetFilesFromDownloads();
+            var files = _fileService.GetFilesFromDirectory(_downloadsPath);
             var fileToOpen = files.FirstOrDefault(f => _shaCalculator.ComputeSha(f).Equals(sha, StringComparison.OrdinalIgnoreCase));
 
             if (fileToOpen != null)

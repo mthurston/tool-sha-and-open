@@ -10,10 +10,14 @@ namespace ShaOpen.Services
 {
     public class FileService : IFileService
     {
-        public IEnumerable<string> GetFilesFromDownloads()
+        public IEnumerable<string> GetFilesFromDirectory(string directoryPath)
         {
-            var downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads";
-            return Directory.EnumerateFiles(downloadsPath);
+            if (!Directory.Exists(directoryPath))
+            {
+                throw new DirectoryNotFoundException($"Directory not found: {directoryPath}");
+            }
+            
+            return Directory.EnumerateFiles(directoryPath);
         }
 
         public void OpenFile(string filePath)

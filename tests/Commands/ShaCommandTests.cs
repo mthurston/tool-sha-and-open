@@ -1,4 +1,7 @@
+using System;
+using System.IO;
 using Xunit;
+using ShaOpen.Commands;
 using ShaOpen.Services;
 
 namespace ShaOpen.Tests.Commands
@@ -11,10 +14,27 @@ namespace ShaOpen.Tests.Commands
             // Arrange
             var fileService = new FileService();
             var shaCalculator = new ShaCalculator();
+            var downloadsPath = Path.Combine(Path.GetTempPath(), "test-downloads");
+            Directory.CreateDirectory(downloadsPath);
 
-            // Act & Assert
-            // This test just ensures the command can be created without issues
-            // More comprehensive tests would require setting up the command line infrastructure
+            // Act
+            var shaCommand = new ShaCommand(fileService, shaCalculator, downloadsPath);
+
+            // Assert
+            Assert.NotNull(shaCommand);
+            
+            // Cleanup
+            Directory.Delete(downloadsPath, true);
+        }
+
+        [Fact]
+        public void Services_CanBeInstantiated()
+        {
+            // Arrange & Act
+            var fileService = new FileService();
+            var shaCalculator = new ShaCalculator();
+
+            // Assert
             Assert.NotNull(fileService);
             Assert.NotNull(shaCalculator);
         }

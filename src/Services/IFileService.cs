@@ -5,7 +5,7 @@ namespace ShaOpen.Services
 {
     public interface IFileService
     {
-        IEnumerable<string> GetFilesFromDownloads();
+        IEnumerable<string> GetFilesFromDirectory(string directoryPath);
         void OpenFile(string filePath);
     }
 }
