@@ -7,7 +7,7 @@
 **/packages.config @mthurston
 
 # GitHub Actions workflows  
-.github/workflows/ @mthurston
+.github/workflows/** @mthurston
 
 # Dependabot configuration
 .github/dependabot.yml @mthurston
